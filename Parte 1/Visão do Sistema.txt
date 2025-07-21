@@ -1,0 +1,3 @@
+Apresentar um documento com: título do projeto, objetivo do sistema, descrição do problema a ser
+resolvido, perfis de usuários envolvidos e a lista de operações que o aplicativo deve realizar.
+
