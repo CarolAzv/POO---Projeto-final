@@ -1,11 +1,31 @@
-Apresentar um documento com: título do projeto, objetivo do sistema, descrição do problema a ser
-resolvido, perfis de usuários envolvidos e a lista de operações que o aplicativo deve realizar.
-
+Título do Projeto
 
 Objetivo do Sistema:
-  #Site de organização de horario e destrubuição de trabalho para uma impresa
-  Oferecer uma plataforma de organização e destribuição de horario de trablaho e trabalhos
+  Oferecer uma plataforma de organização e destribuição de horario de trablaho e projetos
 
 Descrição do Problema:
 
-Perfis de Usuários Envolvidos
+Perfis de Usuários Envolvidos:
+  Gerentes/Admins que criam horarios e projetos
+  Funcionarios/Usuario que recebem horarios e projetos
+
+Lista de Operações:
+  Criar horario de trabalho
+  Criar projeto
+  Criar Funcionarios/Usuario
+  Colocar Funcionario/Usuario em horario de trapalho
+  Colocar Funcionario/Usuario em projeto
+  Listar horarios de trabalho
+  Listar projetos
+  Atualizar status dos projetos
+  Atualizar horario de trabalho
+  Atualizar projeto
+  Atualizar informação do Funcionarios/Usuario
+  Excluir horario de trabalho
+
+  Listar meus horarios de trabalho
+  Listar meus projetos
+  Atualizar status dos meus projetos
+  Atualizar minha informação
+  Entrar
+  Sair
