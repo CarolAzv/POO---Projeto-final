@@ -1,4 +1,5 @@
-Título do Projeto
+Título do Projeto:
+  Organização e Destrubuição de Horario e Projetos
 
 Objetivo do Sistema:
   Oferecer uma plataforma de organização e destribuição de horario de trablaho e projetos
