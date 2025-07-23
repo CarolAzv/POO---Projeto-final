@@ -1,7 +1,7 @@
 import streamlit as st
 class Funcionario:
     def __init__(self, id, nome, email, cell, senha):
-        self.__id = id
+        self.set_id(id)
         self.set_nome(nome)
         self.set_email(email)
         self.set_cell(cell)
