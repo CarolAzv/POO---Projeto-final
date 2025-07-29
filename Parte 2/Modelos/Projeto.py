@@ -1,9 +1,10 @@
 from datetime import datetime
 class Projetos:
-  def __inti__(self, id, descricao, data_comeco, status, idFuncionario):
+  def __inti__(self, id, descricao, data_comeco, data_fim, status, idFuncionario):
     self.set_id(id)
     self.set_descricao(descricao)
     self.set_data_comeco(data_comeco)
+    self.set_data_fim(data_fim)
     self.set_status(status)
     self.set_idFuncionario(idFuncionario)
 
@@ -17,6 +18,8 @@ class Projetos:
      if d == "":
             raise ValueError("A data de começo não pode está vazia!")
     self.__data_comeco = data_comeco
+  def set_data_fim(self, data_fim):
+    self.__data_fim = data_fim
   def set_status(self, status):
     if status == "":
              raise ValueError("Informe o status!")
