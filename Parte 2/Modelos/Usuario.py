@@ -1,5 +1,5 @@
 import streamlit as st
-class Funcionario:
+class Usuario:
     def __init__(self, id, nome, email, cell, senha):
         self.set_id(id)
         self.set_nome(nome)
