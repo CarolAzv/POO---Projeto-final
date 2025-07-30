@@ -1,3 +1,4 @@
+import streamlit as st
 class Papel:
     def __inti__(self, id_membro, id_papel):
         self.set_id_membro(id_membro)
