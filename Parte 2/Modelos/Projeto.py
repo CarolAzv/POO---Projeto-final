@@ -1,3 +1,4 @@
+import streamlit as st
 from datetime import datetime
 class Projetos:
     def __inti__(self, id, descricao, data_comeco, data_fim, status, idPessoa):
