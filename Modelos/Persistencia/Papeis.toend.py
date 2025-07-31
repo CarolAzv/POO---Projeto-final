@@ -41,6 +41,7 @@ class Papeis:
         else:
             raise ValueError(f"Usuario com ID {obj.get_id()} não encontrado para atualização.")
 
+    #remover isso aqui, remover papel quando remover membro, adicionar papel quando adicionar membro
     @classmethod
     def excluir(cls, obj):
         cls.abrir()
