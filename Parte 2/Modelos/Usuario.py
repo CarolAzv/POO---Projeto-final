@@ -16,7 +16,7 @@ class Usuario:
         self.__email = email
     def set_cell(self, cell):
         if len(cell) == 11:
-            self.__cel = cel
+            self.__cell = cell
         else: raise ValueError("O número deve está no formato xxxxxxxxxxx - com 11 números")
     def set_senha(self, s):
         if len(s) < 4 : raise ValueError(f"Senha deve ter no mínimo 4 caracteres")
