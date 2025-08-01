@@ -1,32 +1,29 @@
 Título do Projeto:
-  Organização e Destrubuição de Horario e Projetos
+  Organização e Destrubuição de Projetos e Tarefas
 
 Objetivo do Sistema:
-  Oferecer uma plataforma de organização e destribuição de horario de trablaho e projetos
+  Oferecer uma plataforma de organização e destribuição de projetos e trablaho
 
 Descrição do Problema:
 
 Perfis de Usuários Envolvidos:
-  Gerentes/Admins que criam horarios e projetos
-  Funcionarios/Usuario que recebem horarios e projetos
+  Usuario que criam e recebem projetos e trabalhos em uma comunidade
 
 Lista de Operações:
-  Criar horario de trabalho
-  Criar projeto
-  Criar Funcionarios/Usuario
-  Colocar Funcionario/Usuario em horario de trapalho
-  Colocar Funcionario/Usuario em projeto
-  Listar horarios de trabalho
+  Criar Projeto
+  Criar Usuario
+  Criar Tarefas
+  Colocar Usuario em projeto
+  Colocar Usuario em Tarefas
   Listar projetos
-  Atualizar status dos projetos
-  Atualizar horario de trabalho
+  Listar Tarefas
   Atualizar projeto
-  Atualizar informação do Funcionarios/Usuario
-  Excluir horario de trabalho
+  Atualizar Tarefas
+  Atualizar informação do Usuario
+  Excluir projeto
+  Excluir Tarefas
 
-  Listar meus horarios de trabalho
   Listar meus projetos
-  Atualizar status dos meus projetos
-  Atualizar minha informação
+  Listar minhas tarefas
   Entrar
   Sair
