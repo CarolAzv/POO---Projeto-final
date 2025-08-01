@@ -1,6 +1,4 @@
 import streamlit as st
-from Modelos.Entidades.Usuario import Usuario
-from Modelos.Persistencia.Usuarios import Usuarios
 
 if "pagina_atual" not in st.session_state:
     st.session_state.pagina_atual = "Menu"
@@ -13,8 +11,19 @@ def main():
         st.title("testando")
     else:
         if st.session_state.pagina_atual =="Menu":
-            st.title("isso deveria aparecer")
+            st.title("Organização e Destrubuição de Projetos e Tarefas")
+            col1, col2 = st.columns(2)
+            with col1:
+                if st.button("Entrar", key="btn_entrar_home"):
+                    st.session_state.pagina_atual = "login"
+                    st.rerun()
+            with col2:
+                if st.button("Cadastre-se", key="btn_cadastro_home"):
+                    st.session_state.pagina_atual = "cadastro"
+                    st.rerun()
         if st.session_state.pagina_atual =="Login":
             st.title("Você está fazendo o Login!")
-        if st.session_state.pagina_atual =="Cadastro":
-            st.title("Você está fazendo o Cadasro!")
+        if st.session_state.pagina_atual =="cadastro":
+            st.title("Você está fazendo o cadastro!")
+
+main()
