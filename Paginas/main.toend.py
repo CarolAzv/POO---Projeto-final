@@ -8,7 +8,6 @@ if "pagina_atual" not in st.session_state:
     st.session_state.pagina_atual = "home"
 if "logged_in" not in st.session_state:
     st.session_state.logged_in = False
-    st.session_state.tipo_usuario = None
     st.session_state.object_usuario = None
 
 
@@ -39,7 +38,7 @@ def main():
     else:
        
         if st.session_state.pagina_atual == "home":
-            st.title("Mercado eletrônico")
+            st.title("Organização e Destrubuição de Projetos e Tarefas")
             st.header("Bem-vindo(a), Visitante")
             col1, col2 = st.columns(2)
             with col1:
