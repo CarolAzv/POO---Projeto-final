@@ -7,7 +7,7 @@ class Papel:
     def set_idMembro(self, idMembro):
         self.__idMembro = idMembro
     def set_papel(self, papel):
-        if nome == "": raise ValueError("Informe seu papel!")
+        if papel == "": raise ValueError("Informe seu papel!")
         self.__papel = papel
 
     def get_idMembro(self):

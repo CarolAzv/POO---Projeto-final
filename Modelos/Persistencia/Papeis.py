@@ -1,11 +1,10 @@
 import json
 import os 
-from Modelos.Entidades.Membro import Membro
-from Papeis import Papeis
+from Modelos.Entidades.Papel import Papel
 import streamlit as st
-class Membros:
+class Papeis:
     objetos = [] 
-    FILE_PATH = 'Data/membro.json'
+    FILE_PATH = 'Data/papel.json'
 
     @classmethod 
     def inserir(cls, obj):
@@ -13,8 +12,7 @@ class Membros:
         m = max((x.get_id() for x in cls.objetos), default=0)
         obj.set_id(m + 1)
         cls.objetos.append(obj)
-        cls.salvar()
-        Papeis.inserir(cls, obj) #inserir informação sobre papel
+        cls.salvar() 
 
     @classmethod
     def listar(cls):
@@ -22,10 +20,10 @@ class Membros:
         return cls.objetos
 
     @classmethod
-    def listar_id(cls, id):
+    def listar_idMembro(cls, id):
         cls.abrir()
         for obj in cls.objetos:
-            if obj.get_id() == id:
+            if obj.get_idMembro() == id:
                 return obj
         return None
 
@@ -41,8 +39,9 @@ class Membros:
         if found:
             cls.salvar()
         else:
-            raise ValueError(f"Cliente com ID {obj.get_id()} não encontrado para atualização.")
+            raise ValueError(f"Usuario com ID {obj.get_id()} não encontrado para atualização.")
 
+    #remover papel quando remover membro, adicionar papel quando adicionar membro
     @classmethod
     def excluir(cls, obj):
         cls.abrir()
@@ -50,17 +49,8 @@ class Membros:
         cls.objetos = [item for item in cls.objetos if item.get_id() != obj.get_id()]
         if len(cls.objetos) < original_len:
             cls.salvar()
-            Papeis.excluir(cls, obj) #deve excluir o papel asociado
         else:
-            raise ValueError(f"Cliente com ID {obj.get_id()} não encontrado para exclusão.")
-
-    @classmethod
-    def listar_membros(cls, idProjeto):
-        cls.abrir()
-        for obj in cls.objetos:
-            if obj.get_idProjeto() == idProjeto:
-                return obj
-        return None
+            raise ValueError(f"Usuario com ID {obj.get_id()} não encontrado para exclusão.")
 
     @classmethod
     def abrir(cls):
@@ -71,7 +61,7 @@ class Membros:
                 with open(cls.FILE_PATH, "r", encoding='utf-8') as arquivo:
                     dados = json.load(arquivo)
                     for d in dados:
-                        obj = Membro.from_dict(d)
+                        obj = Usuario.from_dict(d)
                         cls.objetos.append(obj)
             else:
                 with open(cls.FILE_PATH, 'w', encoding='utf-8') as f:
