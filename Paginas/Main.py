@@ -1,4 +1,6 @@
 import streamlit as st
+from Modelos.Entidades.Usuario import Usuario
+from Modelos.Persistencia.Usuarios import Usuarios
 
 if "pagina_atual" not in st.session_state:
     st.session_state.pagina_atual = "Menu"
@@ -21,9 +23,68 @@ def main():
                 if st.button("Cadastre-se", key="btn_cadastro_home"):
                     st.session_state.pagina_atual = "Cadastro"
                     st.rerun()
+
+
         if st.session_state.pagina_atual =="Login":
             st.title("Você está fazendo o Login!")
+            with st.form("login_usuario_form"):
+                email = st.text_input("E-mail:", key="login_email_input")
+                senha = st.text_input("Senha:", type="password", key="login_senha_input")
+
+                submitted = st.form_submit_button("Entrar")
+
+                if submitted:
+                    if not email or not senha:
+                        st.error("Por favor, preencha todos os campos.")
+                    else:
+                        try:
+                            tipo_usuario_logado, obj_usuario = usuario.login(email, senha)
+
+                            st.session_state.logged_in = True
+                            st.session_state.tipo_usuario = tipo_usuario_logado
+                            st.session_state.object_usuario = obj_usuario
+
+                            st.success(f"Login bem-sucedido como {tipo_usuario_logado.capitalize()}!")
+
+                          
+                            if tipo_usuario_logado == 'admin':
+                                st.session_state.pagina_atual = "AdminPage"
+                            elif tipo_usuario_logado == 'cliente':
+                                st.session_state.pagina_atual = "cliente_page"
+                            elif tipo_usuario_logado == 'entregador':
+                                st.session_state.pagina_atual = "entregador_page"
+
+                            st.rerun() 
+
+                        except ValueError as e:
+                            st.error(f"Erro no login: {e}")
+                        except Exception as e:
+                            st.error(f"Ocorreu um erro inesperado: {e}")
+
+
         if st.session_state.pagina_atual =="Cadastro":
             st.title("Você está fazendo o cadastro!")
+            st.write("Preencha os dados para criar sua conta.")
+
+            novo_nome = st.text_input("Nome Completo:", key="cadastro_nome")
+            novo_email = st.text_input("Email:", key="cadastro_email")
+            novo_cell = st.text_input("Numero de Celular:", key="cadastro_cell")
+            novo_senha = st.text_input("Senha:", key="cadastro_senha")
+
+            if st.button("Cadastrar", key="btn_cadastrar"):
+                if not novo_nome or not novo_email or not novo_cell or not novo_senha:
+                    st.error("Preencha todos os campos para concluir o cadastro.")
+                else:
+                    try:
+                        novo_usuario = Usuario(id=0, nome=novo_nome, email=novo_email, fone=novo_cell, senha = novo_senha)
+                        Usuarios.inserir(novo_usuario)
+
+                        st.success("Cadastro realizado com sucesso!")
+                        st.session_state.pagina_atual = 'login'
+                        st.rerun()
+                    except ValueError as e:
+                        st.error(f"Erro no cadastro: {e}")
+                    except Exception as e:
+                        st.error(f"Ocorreu um erro inesperado: {e}")
 
 main()
