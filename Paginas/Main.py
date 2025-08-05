@@ -46,7 +46,13 @@ def main():
 
                             st.success(f"Login bem-sucedido como {tipo_usuario_logado.capitalize()}!")
 
-                            st.session_state.pagina_atual = "usuariopage"
+                          
+                            if tipo_usuario_logado == 'admin':
+                                st.session_state.pagina_atual = "AdminPage"
+                            elif tipo_usuario_logado == 'cliente':
+                                st.session_state.pagina_atual = "cliente_page"
+                            elif tipo_usuario_logado == 'entregador':
+                                st.session_state.pagina_atual = "entregador_page"
 
                             st.rerun() 
 
@@ -82,4 +88,3 @@ def main():
                         st.error(f"Ocorreu um erro inesperado: {e}")
 
 main()
-
