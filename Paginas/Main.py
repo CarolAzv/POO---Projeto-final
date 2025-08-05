@@ -40,16 +40,13 @@ def main():
                         st.error("Por favor, preencha todos os campos.")
                     else:
                         try:
-                            tipo_usuario_logado, obj_usuario = Usuario.login(email, senha)
+                            tipo_usuario_logado, obj_usuario = Usuarios.login(email, senha)
 
                             st.session_state.logged_in = True
                             st.session_state.tipo_usuario = tipo_usuario_logado
                             st.session_state.object_usuario = obj_usuario
 
                             st.success(f"Login bem-sucedido como {tipo_usuario_logado.capitalize()}!")
-
-                            st.session_state.pagina_atual = "UsuarioPage"
-
                             st.rerun() 
 
                         except ValueError as e:
