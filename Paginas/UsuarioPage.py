@@ -56,20 +56,16 @@ def show():
             st.write("Preencha tudo para criar um novo projeto.")
             with st.form("form_cadastro_cliente", clear_on_submit=True):
                 novo_nome = st.text_input("Nome:", key="projeto_nome")
-                novo_descricao = st.text_input("Email:", key="projeto_descricao")
-                novo_ = st.text_input("Senha:", type="password", key="projeto_senha")
-                novo_ = st.text_input("Telefone:", key="projeto_fone")
-                novo_ = st.text_input("Endereço:", key="projeto_endereco")
-
-                submitted_projeto = st.form_submit_button("Cadastrar Cliente")
+                novo_descricao = st.text_input("Descrição:", key="projeto_descricao")
+                submitted_projeto = st.form_submit_button("Criar Projeto")
 
                 if submitted_projeto:
-                    if not nome_novo or not email_novo or not senha_nova or not fone_novo or  not endereco_novo:
-                        st.error("Por favor, preencha todos os campos para o cadastro.")
+                    if not novo_nome or not novo_descricao:
+                        st.error("Por favor, preencha todos os campos.")
                     else:
                         try:
-                            novo_cliente = Cliente(id=0, nome=nome_novo, email=email_novo, senha=senha_nova, fone=fone_novo,endereco = endereco_novo)
-                            Clientes.inserir(novo_cliente)
+                            novo_projeto = Projeto(id=0, idCriador=AAAAAAA, nome=nome_novo, descricao=novo_descricao, data_comeco=datetime.now(), data_fim = 0)
+                            Projetos.inserir(novo_cliente)
                             
                             st.success(f"Cliente '{nome_novo}' cadastrado com sucesso!")
                             
