@@ -74,18 +74,47 @@ def show():
                         except Exception as e:
                             st.error(f"Ocorreu um erro inesperado: {e}")
 
-        elif opcoes_cliente == "Listar Clientes":
-            st.subheader("Lista de clientes cadastrados")
-            todos_clientes = Clientes.listar()
-            if todos_clientes:
-                dados_clientes = [c.to_dict() for c in todos_clientes]
+        elif opcoes_projeto == "Listar Projetos":
+            st.subheader("Lista de Projetos")
+            todos_projetos = Projetos.listar()
+            if todos_projetos:
+                dados_projetos = [c.to_dict() for c in todos_projetos]
                 
-                df_clientes = pd.DataFrame(dados_clientes) 
+                df_projetos = pd.DataFrame(dados_projetos) 
                 
-                st.dataframe(df_clientes) 
+                st.dataframe(df_projetos) 
             else:
-                st.info("Nenhum cliente cadastrado ainda.")
-        elif opcoes_cliente == "Listar Compras": 
+                st.info("Nenhum projeto criado ainda.")
+
+        elif opcoes_projeto == "Ver Projeto":
+            st.subheader("Projeto")
+            projento_vendo = None
+            if not projento_vendo:
+                st.white("Indique o nome ou id do projeto: ")
+                with st.form("form_ver_projeto", clear_on_submit=True):
+                    proj_nome = st.text_input("Nome do projeto:", key="projeto_nome")
+                    proj_id = st.text_input("Ido do projeto:", key="projeto_id")
+                    submitted_ver_proj = st.form_submit_button("Visualizar")
+
+                    if submitted_ver_proj:
+                        if not novo_nome and not novo_descricao:
+                            st.error("Por favor, preencha pelo menos um dos campos.")
+                        else:
+                            projento_vendo = [proj_nome , proj_id]
+                
+                todos_projetos = Projetos.listar()
+                if todos_projetos:
+                    dados_projetos = [c.to_dict() for c in todos_projetos]
+                    
+                    df_projetos = pd.DataFrame(dados_projetos) 
+                    
+                    st.dataframe(df_projetos) 
+                else:
+                    st.info("Nenhum projeto criado ainda.")
+            else: #mostrar todas as informações do projeto
+
+                
+        """elif opcoes_cliente == "Listar Compras": 
             st.subheader("Todas as Compras Realizadas")
             todos_pedidos = Pedidos.listar()
 
@@ -119,7 +148,7 @@ def show():
                             produto_nome = produto_info.get_nome() if produto_info else "Produto Desconhecido"
                             st.markdown(f"- **{produto_nome}** (Qtd: {item.get('quantidade')}, R$ {item.get('preco_unitario'):.2f} cada)")
                     else:
-                        st.info("Nenhum item detalhado para este pedido.")
+                        st.info("Nenhum item detalhado para este pedido.")"""
         elif opcoes_cliente == "Atualizar dados do Cliente":
             st.subheader("Atualizar os dados do Cliente")
             todos_clientes = Clientes.listar()
