@@ -1,4 +1,5 @@
 import streamlit as st
+from Paginas.UsuarioPage import show as show_usuario
 from Modelos.Entidades.Usuario import Usuario
 from Modelos.Persistencia.Usuarios import Usuarios
 
@@ -10,7 +11,8 @@ if "logged_in" not in st.session_state:
 
 def main():
     if st.session_state.logged_in:
-        st.title("testando")
+        show_usuario()
+        return
     else:
         if st.session_state.pagina_atual =="Menu":
             st.title("Organização e Destrubuição de Projetos e Tarefas")
@@ -38,7 +40,7 @@ def main():
                         st.error("Por favor, preencha todos os campos.")
                     else:
                         try:
-                            tipo_usuario_logado, obj_usuario = usuario.login(email, senha)
+                            tipo_usuario_logado, obj_usuario = Usuario.login(email, senha)
 
                             st.session_state.logged_in = True
                             st.session_state.tipo_usuario = tipo_usuario_logado
@@ -46,13 +48,7 @@ def main():
 
                             st.success(f"Login bem-sucedido como {tipo_usuario_logado.capitalize()}!")
 
-                          
-                            if tipo_usuario_logado == 'admin':
-                                st.session_state.pagina_atual = "AdminPage"
-                            elif tipo_usuario_logado == 'cliente':
-                                st.session_state.pagina_atual = "cliente_page"
-                            elif tipo_usuario_logado == 'entregador':
-                                st.session_state.pagina_atual = "entregador_page"
+                            st.session_state.pagina_atual = "UsuarioPage"
 
                             st.rerun() 
 
