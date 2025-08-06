@@ -91,4 +91,13 @@ class Projetos:
     @classmethod
     def salvar(cls):
         with open(cls.FILE_PATH, "w", encoding='utf-8') as arquivo:
+
             json.dump([obj.to_dict() for obj in cls.objetos], arquivo, indent=4, ensure_ascii=False)
+
+    @classmethod
+    def filtrar(cls, projetos, idCriador):
+        cls.abrir()
+        for obj in cls.objetos:
+            if projetos.get_idCriador() == idCriador:
+                return obj
+        return None
