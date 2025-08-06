@@ -162,11 +162,13 @@ def show():
             st.subheader("Excluir Membro")
             todos_projetos = Projetos.listar()
             todos_membros = Membros.listar()
+            nossos_projetos = Projetos.filtrar(todos_projetos, st.session_state.object_usuario[id])
+            nossos_membros = Projetos.filtrar(todos_membros, nossos_projetos)
             
-            opcoes_clientes_selectbox = [f"{c.get_nome()} (ID: {c.get_id()})" for c in todos_clientes]
+            opcoes_membros_selectbox = [f"{c.get_nome()} (ID: {c.get_id()})" for c in todos_membros]
             cliente_selecionado_str = st.selectbox(
                 "Selecione o cliente para excluir:",
-                opcoes_clientes_selectbox,
+                opcoes_membros_selectbox,
                 key="select_cliente_delete"
             )
             cliente_id_str = cliente_selecionado_str.split('(ID: ')[1][:-1]
@@ -224,101 +226,17 @@ def show():
                     else:
                         st.info("Nenhum item detalhado para este pedido.")"""
         
-        elif opcoes_cliente == "Atualizar dados do Cliente":
-            st.subheader("Atualizar os dados do Cliente")
-            todos_clientes = Clientes.listar()
-            if not todos_clientes:
-                st.info("Nenhum cliente cadastrado para atualizar.")
-            else:
-                opcoes_clientes_selectbox = [f"{c.get_nome()} (ID: {c.get_id()})" for c in todos_clientes]
-                
-                cliente_selecionado_str = st.selectbox(
-                    "Selecione o cliente para atualizar:",
-                    opcoes_clientes_selectbox,
-                    key="select_cliente_update"
-                )
-                
-                
-                cliente_id_str = cliente_selecionado_str.split('(ID: ')[1][:-1]
-                cliente_id = int(cliente_id_str)
-                                                                                                                                                                                                                                                                                                                       
-                
-                cliente_para_atualizar = Clientes.listar_id(cliente_id)
-
-                if cliente_para_atualizar:
-                   
-                    with st.form("form_atualizar_cliente", clear_on_submit=False):
-                        st.write(f"Atualizando cliente ID: {cliente_para_atualizar.get_id()}")
-                        nome_atualizado = st.text_input("Nome Completo:", value=cliente_para_atualizar.get_nome(), key="nome_cliente_update")
-                        email_atualizado = st.text_input("Email:", value=cliente_para_atualizar.get_email(), key="email_cliente_update")
-                        senha_atualizada = st.text_input("Nova Senha (deixe em branco para manter a atual):", type="password", key="senha_cliente_update")
-                        fone_atualizado = st.text_input("Telefone:", value=cliente_para_atualizar.get_fone(), key="fone_cliente_update")
-
-                        submit_atualizacao = st.form_submit_button("Atualizar Cliente")
-
-                        if submit_atualizacao:
-                            if not nome_atualizado or not email_atualizado or not fone_atualizado:
-                                st.error("Por favor, preencha nome, email e telefone.")
-                            else:
-                                try:
-                                    # Cria um novo objeto Cliente com os dados atualizados
-                                    # Mantém o ID original
-                                    cliente_atualizado_obj = Cliente(
-                                        id=cliente_para_atualizar.get_id(),
-                                        nome=nome_atualizado,
-                                        email=email_atualizado,
-                                       
-                                        senha=senha_atualizada if senha_atualizada else cliente_para_atualizar.get_senha(),
-                                        fone=fone_atualizado
-                                    )
-                                    
-                                    Clientes.atualizar(cliente_atualizado_obj)
-                                    st.success(f"Cliente '{nome_atualizado}' atualizado com sucesso!")
-                                    st.rerun() 
-                                except ValueError as e:
-                                    st.error(f"Erro na atualização: {e}")
-                                except Exception as e:
-                                    st.error(f"Ocorreu um erro inesperado: {e}")
-                else:
-                    st.warning("Cliente selecionado não encontrado. Por favor, selecione um cliente válido.")
-
     #=======================================================================================================================
     #=======================================================================================================================
     #=======================================================================================================================
     with tab_tarefas:
         st.header("Ver suas Tarefas")
-        opcoes_entregadores = st.radio(
+        opcoes_tarefas = st.radio(
             "Selecione uma opção",
-            ("Cadastrar Entregador","Listar entregadores","Atualizar dados do Entregador","Excluir Entregador"),
+            ("Listar suas tarefas","Atualizar suas tarefas"),
             key = "radio_entregadores"
         )
-        if opcoes_entregadores == "Cadastrar Entregador":
-            st.subheader("Cadastrar novo Entregador")
-            st.write("Preencha os dados para criar a conta.")
-            with st.form("form_cadastro_entregador", clear_on_submit=True):
-                nome_novo = st.text_input("Nome Completo:", key="cadastro_nome_entregador")
-                email_novo = st.text_input("Email:", key="cadastro_email_entregador")
-                senha_nova = st.text_input("Senha:", type="password", key="cadastro_senha_entregador")
-                fone_novo = st.text_input("Telefone:", key="cadastro_fone_entregador")
-                transporte_novo = st.text_input("Transporte de Entregas:",key = "cadastro_transporte")
-
-                submitted_cadastro = st.form_submit_button("Cadastrar Entregador")
-
-                if submitted_cadastro:
-                    if not nome_novo or not email_novo or not senha_nova or not fone_novo or not transporte_novo:
-                        st.error("Por favor, preencha todos os campos para o cadastro.")
-                    else:
-                        try:
-                            novo_entregador = Entregador(id=0, nome=nome_novo, email=email_novo, senha=senha_nova, fone=fone_novo,transporte=transporte_novo)
-                            Entregadores.inserir(novo_entregador)
-                            
-                            st.success(f"Entregador '{nome_novo}' cadastrado com sucesso!")
-                            
-                        except ValueError as e:
-                            st.error(f"Erro no cadastro: {e}")
-                        except Exception as e:
-                            st.error(f"Ocorreu um erro inesperado: {e}")
-        elif opcoes_entregadores == "Listar entregadores":
+        if opcoes_tarefas == "Listar entregadores":
             st.subheader("Lista de Entregadores cadastrados")
             todos_entregadores = Entregadores.listar()
             if todos_entregadores:
@@ -330,7 +248,7 @@ def show():
             else:
                 st.info("Nenhum entregador cadastrado ainda.")
 
-        elif opcoes_entregadores == "Atualizar dados do Entregador":
+        elif opcoes_tarefas == "Atualizar dados do Entregador":
             st.subheader("Atualizar Dados do Entregador")
             todos_entregadores = Entregadores.listar()
             if not todos_entregadores:
@@ -380,36 +298,6 @@ def show():
                 else:
                     st.warning("Entregador selecionado não encontrado. Por favor, selecione um entregador válido.")
 
-        elif opcoes_entregadores == "Excluir Entregador":
-            st.subheader("Excluir Entregador")
-            todos_entregadores = Entregadores.listar()
-            if not todos_entregadores:
-                st.info("Nenhum entregador para excluir.")
-            else:
-                opcoes_entregadores_selectbox = [f"{e.get_nome()} (ID: {e.get_id()})" for e in todos_entregadores]
-                entregador_selecionado_str = st.selectbox(
-                    "Selecione o entregador para excluir:",
-                    opcoes_entregadores_selectbox,
-                    key="select_entregador_delete"
-                )
-                entregador_id_str = entregador_selecionado_str.split('(ID: ')[1][:-1]
-                entregador_id = int(entregador_id_str)
-                entregador_para_excluir = Entregadores.listar_id(entregador_id)
-
-                if entregador_para_excluir:
-                    st.warning(f"Tem certeza que deseja excluir o entregador: '{entregador_para_excluir.get_nome()}' (ID: {entregador_para_excluir.get_id()})?")
-                    if st.button("Confirmar Exclusão", key="confirm_delete_entregador"):
-                        try:
-                            Entregadores.excluir(entregador_para_excluir)
-                            st.success(f"Entregador '{entregador_para_excluir.get_nome()}' excluído com sucesso!")
-                            st.rerun()
-                        except ValueError as e:
-                            st.error(f"Erro na exclusão: {e}")
-                        except Exception as e:
-                            st.error(f"Ocorreu um erro inesperado: {e}")
-                else:
-                    st.warning("Entregador selecionado não encontrado.")
-
     #=======================================================================================================================
     #=======================================================================================================================
     #=======================================================================================================================
@@ -449,38 +337,3 @@ def show():
                             st.error(f"Ocorreu um erro inesperado: {e}")
         else:
             st.warning("Categoria selecionada não encontrada.")
-
-
-
-
-        elif opcoes_categorias == "Excluir Categoria":
-            st.subheader("Aba pra Excluir uma Categoria")
-            todas_categorias = Categorias.listar()
-            if not todas_categorias:
-                st.info("Nenhuma categoria para excluir.")
-            else:
-                nomes_categorias = [f"{c.get_nome()} (ID: {c.get_id()})" for c in todas_categorias]
-                categoria_selecionada_nome = st.selectbox(
-                    "Selecione a categoria para excluir:",
-                    nomes_categorias,
-                    key="select_categoria_delete"
-                )
-
-               
-                categoria_id_str = categoria_selecionada_nome.split('(ID: ')[1][:-1]
-                categoria_id = int(categoria_id_str)
-                categoria_para_excluir = Categorias.listar_id(categoria_id)
-
-                if categoria_para_excluir:
-                    st.warning(f"Tem certeza que deseja excluir a categoria: '{categoria_para_excluir.get_nome()}' (ID: {categoria_para_excluir.get_id()})?")
-                    if st.button("Confirmar Exclusão", key="confirm_delete_categoria"):
-                        try:
-                            Categorias.excluir(categoria_para_excluir.get_id())
-                            st.success(f"Categoria '{categoria_para_excluir.get_nome()}' excluída com sucesso!")
-                            st.rerun() 
-                        except ValueError as e:
-                            st.error(f"Erro na exclusão: {e}")
-                        except Exception as e:
-                            st.error(f"Ocorreu um erro inesperado: {e}")
-                else:
-                    st.warning("Categoria selecionada não encontrada.")
