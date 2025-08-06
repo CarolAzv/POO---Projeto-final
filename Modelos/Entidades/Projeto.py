@@ -14,8 +14,8 @@ class Projeto:
     def set_idCriador(self, idCriador):
         self.__idCriador = idCriador
     def set_nome(self, nome):
-        if descricao == "":
-            raise ValueError("Informe um nome!)
+        if nome == "":
+            raise ValueError("Informe um nome!")
         self.__nome = nome
     def set_descricao(self, descricao):
         if descricao == "":
