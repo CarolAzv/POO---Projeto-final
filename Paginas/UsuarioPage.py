@@ -415,80 +415,44 @@ def show():
     #=======================================================================================================================
     with tab_atualizarUsuario:
         st.header("Atualizar dados do Usuario")
-        opcoes_categorias = st.radio(
-            "Selecione uma opção:",
-            ("Adicionar Categoria","Listar Categoria","Atualizar Categoria","Excluir Categoria"),
-            key = "radio_categorias"
-        )
-        if opcoes_categorias == "Adicionar Categoria":
-            st.subheader("Informe os dados da Categoria")
-            with st.form("form_cadastro_categoria", clear_on_submit=True):
-                nome = st.text_input("Nome da Categoria:",key = "nome_categoria")
-                descricao = st.text_input("Descrição:",key = "descricao_categoria")
-                submit_cadastro = st.form_submit_button("Adicionar categoria")
-                if submit_cadastro:
-                    if not nome or not descricao:
-                        st.error("Por favor, preencha os campos para cadastro de categoria")
+        
+        st.subheader("Aba para Atualizar dados do Usuario")
+        todos_usuarios = Usuarios.listar()
+        for usuario in todos_usuarios:
+            if usurario.get_id
+    
+        usuario_para_atualizar == Usuarios.listar_id(categoria_id) st.session_state.object_usuario
+        if categoria_para_atualizar:
+            with st.form("form_atualizar_usuario", clear_on_submit=False):
+                nome_atualizado = st.text_input("Nome da Categoria:", value=categoria_para_atualizar.get_nome(), key="nome_usuario_update")
+                email_atualizado = st.text_input("Descrição:", value=categoria_para_atualizar.get_descricao(), key="descricao_usuario_update")
+                cell_atualizado = st.text_input("Nome da Categoria:", value=categoria_para_atualizar.get_nome(), key="cll_usuario_update")
+                senha_atualizado = st.text_input("Nome da Categoria:", value=categoria_para_atualizar.get_nome(), key="senha_usuario_update")
+                submit_atualizacao = st.form_submit_button("Atualizar Categoria")
+
+                if submit_atualizacao:
+                    if not nome_atualizado or not descricao_atualizada:
+                        st.error("Por favor, preencha todos os campos para atualização.")
                     else:
                         try:
-                            nova_categoria = Categoria(0,nome,descricao)
-                            Categorias.inserir(nova_categoria)
-                            st.success(f"Categoria '{nome}' adicionada com sucesso!")
+                            categoria_atualizada_obj = Categoria(
+                                categoria_para_atualizar.get_id(),
+                                nome_atualizado,
+                                descricao_atualizada
+                            )
+                            Categorias.atualizar(categoria_atualizada_obj) 
+                            st.success(f"Categoria '{nome_atualizado}' atualizada com sucesso!")
+                            st.rerun()
                         except ValueError as e:
-                            st.error(f"Erro no cadastro: {e}")
+                            st.error(f"Erro na atualização: {e}")
                         except Exception as e:
                             st.error(f"Ocorreu um erro inesperado: {e}")
-        elif opcoes_categorias == "Listar Categoria":
-            st.subheader(" Aba de Lista de Categorias Cadastradas")
-            todas_categorias = Categorias.listar()
-            if todas_categorias:
-                dados_categorias = [c.to_dict() for c in todas_categorias]
-                df_categorias = pd.DataFrame(dados_categorias)
-                st.dataframe(df_categorias)
-            else:
-                st.info("Nenhuma categoria cadastrada ainda.")
+        else:
+            st.warning("Categoria selecionada não encontrada.")
 
-        elif opcoes_categorias == "Atualizar Categoria":
-            st.subheader("Aba para Atualizar dados da Categoria")
-            todas_categorias = Categorias.listar() 
-            if not todas_categorias:
-                st.info("Nenhuma categoria para atualizar.") 
-            else:
-                nomes_categorias = [f"{c.get_nome()} (ID: {c.get_id()})" for c in todas_categorias]
-                categoria_selecionada_nome = st.selectbox(
-                    "Selecione a categoria para atualizar:",
-                    nomes_categorias,
-                    key="select_categoria_update"
-                )
-                categoria_id_str = categoria_selecionada_nome.split('(ID: ')[1][:-1]
-                categoria_id = int(categoria_id_str)
-    
-                categoria_para_atualizar = Categorias.listar_id(categoria_id)
-                if categoria_para_atualizar:
-                    with st.form("form_atualizar_categoria", clear_on_submit=False):
-                        nome_atualizado = st.text_input("Nome da Categoria:", value=categoria_para_atualizar.get_nome(), key="nome_categoria_update")
-                        descricao_atualizada = st.text_input("Descrição:", value=categoria_para_atualizar.get_descricao(), key="descricao_categoria_update")
-                        submit_atualizacao = st.form_submit_button("Atualizar Categoria")
 
-                        if submit_atualizacao:
-                            if not nome_atualizado or not descricao_atualizada:
-                                st.error("Por favor, preencha todos os campos para atualização.")
-                            else:
-                                try:
-                                    categoria_atualizada_obj = Categoria(
-                                        categoria_para_atualizar.get_id(),
-                                        nome_atualizado,
-                                        descricao_atualizada
-                                    )
-                                    Categorias.atualizar(categoria_atualizada_obj) 
-                                    st.success(f"Categoria '{nome_atualizado}' atualizada com sucesso!")
-                                    st.rerun()
-                                except ValueError as e:
-                                    st.error(f"Erro na atualização: {e}")
-                                except Exception as e:
-                                    st.error(f"Ocorreu um erro inesperado: {e}")
-                else:
-                    st.warning("Categoria selecionada não encontrada.")
+
+
         elif opcoes_categorias == "Excluir Categoria":
             st.subheader("Aba pra Excluir uma Categoria")
             todas_categorias = Categorias.listar()
