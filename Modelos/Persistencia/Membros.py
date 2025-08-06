@@ -93,6 +93,7 @@ class Membros:
     def filtrar(cls, membros, projetos):
         cls.abrir()
         for obj in cls.objetos:
-            if membros.get_idProjeto() == projetos:
+            if membros.get_idProjeto() == projetos.get_idCriador:
                 return obj
         return None
+
