@@ -1,6 +1,8 @@
 import json
 import os 
 from Modelos.Entidades.Membro import Membro
+from Modelos.Entidades.Projeto import Projeto
+from Modelos.Persistencia.Projetos import Projeto
 from Papeis import Papeis
 import streamlit as st
 class Membros:
@@ -86,3 +88,11 @@ class Membros:
     def salvar(cls):
         with open(cls.FILE_PATH, "w", encoding='utf-8') as arquivo:
             json.dump([obj.to_dict() for obj in cls.objetos], arquivo, indent=4, ensure_ascii=False)
+
+    @classmethod
+    def filtrar(cls, membros, projetos):
+        cls.abrir()
+        for obj in cls.objetos:
+            if membros.get_idProjeto() == projetos:
+                return obj
+        return None
