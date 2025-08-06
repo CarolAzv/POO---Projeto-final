@@ -307,24 +307,26 @@ def show():
 
         if usuario_para_atualizar:
             with st.form("form_atualizar_usuario", clear_on_submit=False):
-                nome_atualizado = st.text_input("Nome da Categoria:", value=usuario_para_atualizar.get_nome(), key="nome_usuario_update")
-                email_atualizado = st.text_input("Descrição:", value=usuario_para_atualizar.get_descricao(), key="descricao_usuario_update")
-                cell_atualizado = st.text_input("Nome da Categoria:", value=usuario_para_atualizar.get_cell(), key="cell_usuario_update")
-                senha_atualizado = st.text_input("Nome da Categoria:", value=usuario_para_atualizar.get_senha(), key="senha_usuario_update")
-                submit_atualizacao = st.form_submit_button("Atualizar Categoria")
+                nome_atualizado = st.text_input("Nome do Usuário:", value=usuario_para_atualizar.get_nome(), key="nome_usuario_update")
+                email_atualizado = st.text_input("Email:", value=usuario_para_atualizar.get_email(), key="email_usuario_update")
+                cell_atualizado = st.text_input("Celular:", value=usuario_para_atualizar.get_cell(), key="cell_usuario_update")
+                senha_atualizada = st.text_input("Senha:", value=usuario_para_atualizar.get_senha(), key="senha_usuario_update", type="password")
+                submit_atualizacao = st.form_submit_button("Atualizar Usuario")
 
                 if submit_atualizacao:
-                    if not nome_atualizado or not email_atualizado or not cell_atualizado or not senha_atualizado:
+                    if not nome_atualizado or not email_atualizado or not cell_atualizado or not senha_atualizada:
                         st.error("Por favor, preencha todos os campos para atualização.")
                     else:
                         try:
-                            categoria_atualizada_obj = Categoria(
-                                categoria_para_atualizar.get_id(),
+                            usuario_atualizado = Usuario(
+                                st.session_state.object_usuario[id],
                                 nome_atualizado,
-                                descricao_atualizada
+                                email_atualizado,
+                                cell_atualizado,
+                                senha_atualizada
                             )
-                            Categorias.atualizar(categoria_atualizada_obj) 
-                            st.success(f"Categoria '{nome_atualizado}' atualizada com sucesso!")
+                            Usuarios.atualizar(usuario_atualizado) 
+                            st.success(f"Usuario '{nome_atualizado}' atualizada com sucesso!")
                             st.rerun()
                         except ValueError as e:
                             st.error(f"Erro na atualização: {e}")
