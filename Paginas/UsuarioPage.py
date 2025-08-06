@@ -13,12 +13,6 @@ from Modelos.Persistencia.Tarefas import Tarefas
 from datetime import datetime
 
 def show():
-    if not st.session_state.get('logged_in') or st.session_state.get('tipo_usuario') != 'Usuario':
-        st.warning("Acesso negado. Por favor, faça login como administrador.")
-        st.session_state.pagina_atual = 'login' 
-        st.rerun()
-        return
-    
     st.title("Espaço do Usuario")
     usuario_obj = st.session_state.get('object_usuario')
     col_esquerda,col_centro,col_direita = st.columns([1,1,0.2])
