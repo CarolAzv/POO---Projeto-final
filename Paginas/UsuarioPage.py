@@ -54,7 +54,7 @@ def show():
         if opcoes_projeto == "Criar Projeto":
             st.subheader("Criar novo Projeto")
             st.write("Preencha tudo para criar um novo projeto.")
-            with st.form("form_cadastro_cliente", clear_on_submit=True):
+            with st.form("form_cadastro_projeto", clear_on_submit=True):
                 novo_nome = st.text_input("Nome:", key="projeto_nome")
                 novo_descricao = st.text_input("Descrição:", key="projeto_descricao")
                 submitted_projeto = st.form_submit_button("Criar Projeto")
@@ -64,13 +64,14 @@ def show():
                         st.error("Por favor, preencha todos os campos.")
                     else:
                         try:
-                            novo_projeto = Projeto(id=0, idCriador=AAAAAAA, nome=nome_novo, descricao=novo_descricao, data_comeco=datetime.now(), data_fim = 0)
-                            Projetos.inserir(novo_cliente)
+                            #                            v- check if this is right                                                                                           v- check if this is right 
+                            novo_projeto = Projeto(id=0, idCriador=st.session_state.object_usuario(id), nome=nome_novo, descricao=novo_descricao, data_comeco=datetime.now(), data_fim = 0)
+                            Projetos.inserir(novo_projeto)
                             
-                            st.success(f"Cliente '{nome_novo}' cadastrado com sucesso!")
+                            st.success(f"Projeto '{nome_novo}' criado com sucesso!")
                             
                         except ValueError as e:
-                            st.error(f"Erro no cadastro: {e}")
+                            st.error(f"Erro na criação: {e}")
                         except Exception as e:
                             st.error(f"Ocorreu um erro inesperado: {e}")
 
@@ -89,31 +90,104 @@ def show():
         elif opcoes_projeto == "Ver Projeto":
             st.subheader("Projeto")
             projento_vendo = None
-            if not projento_vendo:
-                st.white("Indique o nome ou id do projeto: ")
-                with st.form("form_ver_projeto", clear_on_submit=True):
-                    proj_nome = st.text_input("Nome do projeto:", key="projeto_nome")
-                    proj_id = st.text_input("Ido do projeto:", key="projeto_id")
-                    submitted_ver_proj = st.form_submit_button("Visualizar")
+            st.white("Indique o nome ou id do projeto: ")
+            with st.form("form_ver_projeto", clear_on_submit=True):
+                proj_nome = st.text_input("Nome do projeto:", key="projeto_nome")
+                proj_id = st.text_input("Id do projeto:", key="projeto_id")
+                submitted_ver_proj = st.form_submit_button("Visualizar")
 
-                    if submitted_ver_proj:
-                        if not novo_nome and not novo_descricao:
-                            st.error("Por favor, preencha pelo menos um dos campos.")
-                        else:
-                            projento_vendo = [proj_nome , proj_id]
-                
-                todos_projetos = Projetos.listar()
-                if todos_projetos:
-                    dados_projetos = [c.to_dict() for c in todos_projetos]
-                    
-                    df_projetos = pd.DataFrame(dados_projetos) 
-                    
-                    st.dataframe(df_projetos) 
+                if submitted_ver_proj:
+                     if not novo_nome and not novo_descricao:
+                        st.error("Por favor, preencha pelo menos um dos campos.")
                 else:
-                    st.info("Nenhum projeto criado ainda.")
-            else: #mostrar todas as informações do projeto
-
+                    projento_vendo = [proj_nome, proj_id]
                 
+            todos_projetos = Projetos.listar()
+            if todos_projetos:
+                for i, projeto in todos_projetos:
+                    if projento_vendo[0] == projeto.get_nome or projento_vendo[1] == projeto.get_id:
+                        st.write(f"**Id:** {projeto.get_id()}")
+                        st.write(f"**Nome:** {projeto.get_nome()}")
+                        st.write(f"**Descrição:** {projeto.get_descricao()}")
+                        st.write(f"**Data de inicio:** R$ {projeto.get_data_comeco().strftime('%d/%m/%Y %H:%M')}")
+                        st.write(f"**Data de finalização:** {projeto.get_data_fim().strftime('%d/%m/%Y %H:%M')}")
+                        st.divider()
+                        todos_membros = Membros.listar()
+                        if not todos_membros:
+                            st.write("Nenhuma membro criado.")
+                        else:
+                            for i, membro in todos_membros:
+                                if projento_vendo[1] == membro.get_idProjeto:
+                                    st.write(f"**Id:** {membro.get_id()}")
+                                    st.write(f"**Id do Membro:** {membro.get_idUsuario()}")
+
+                        todos_tarefas = Tarefas.listar()
+                        if not todos_tarefas:
+                            st.write("Nenhuma tarefa nesse projeto.")
+                        else:
+                            for i, tarefa in todos_tarefas:
+                                if projento_vendo[1] == tarefa.get_idProjeto:
+                                    st.write(f"**Id:** {tarefa.get_id()}")
+                                    st.write(f"**Id do Membro:** {tarefa.get_idUsuario()}")
+                                    st.write(f"**Descrição:** {tarefa.get_descriçao()}")
+                                    st.write(f"**Data de inicio:** R$ {tarefa.get_data_comeco().strftime('%d/%m/%Y %H:%M')}")
+                                    st.write(f"**Status:** {tarefa.get_get_status()}")
+
+            else:
+                st.info("Nenhum projeto criado ainda.")
+
+        elif opcoes_projeto == "Adicionar Membro":
+            st.subheader("Adicionar Membro a um Projeto")
+            todos_projetos = Projetos.listar()
+            with st.form("form_adi_membro", clear_on_submit=True):
+                proj_id = st.text_input("Id do projeto:", key="projeto_id")
+                membro_id = st.text_input("Id do Usuario:", key="projeto_id")
+                submitted_ver_proj = st.form_submit_button("Visualizar")
+
+                if submitted_ver_proj:
+                     if not novo_nome and not novo_descricao:
+                        st.error("Por favor, preencha pelo menos um dos campos.")
+                else:
+                    try:
+                        novo_membro = Membro(id=0, idUsuario=membro_id, idProjeto=proj_id)
+                        Membros.inserir(novo_membro)
+
+                        st.success("Membro adicionado com sucesso!")
+                    except ValueError as e:
+                        st.error(f"Erro ao adicionar: {e}")
+                    except Exception as e:
+                        st.error(f"Ocorreu um erro inesperado: {e}")
+
+        elif opcoes_projeto == "Excluir Membro":
+            st.subheader("Excluir Membro")
+            todos_projetos = Projetos.listar()
+            todos_membros = Membros.listar()
+            
+            opcoes_clientes_selectbox = [f"{c.get_nome()} (ID: {c.get_id()})" for c in todos_clientes]
+            cliente_selecionado_str = st.selectbox(
+                "Selecione o cliente para excluir:",
+                opcoes_clientes_selectbox,
+                key="select_cliente_delete"
+            )
+            cliente_id_str = cliente_selecionado_str.split('(ID: ')[1][:-1]
+            cliente_id = int(cliente_id_str)
+            cliente_para_excluir = Clientes.listar_id(cliente_id)
+
+            if cliente_para_excluir:
+                st.warning(f"Tem certeza que deseja excluir o cliente: '{cliente_para_excluir.get_nome()}' (ID: {cliente_para_excluir.get_id()})?")
+                if st.button("Confirmar Exclusão", key="confirm_delete_cliente"):
+                    try:
+                        Clientes.excluir(cliente_para_excluir) 
+                        st.success(f"Cliente '{cliente_para_excluir.get_nome()}' excluído com sucesso!")
+                        st.rerun() 
+                    except ValueError as e:
+                        st.error(f"Erro na exclusão: {e}")
+                    except Exception as e:
+                        st.error(f"Ocorreu um erro inesperado: {e}")
+            else:
+                st.warning("Cliente selecionado não encontrado.")
+                
+
         """elif opcoes_cliente == "Listar Compras": 
             st.subheader("Todas as Compras Realizadas")
             todos_pedidos = Pedidos.listar()
@@ -149,6 +223,7 @@ def show():
                             st.markdown(f"- **{produto_nome}** (Qtd: {item.get('quantidade')}, R$ {item.get('preco_unitario'):.2f} cada)")
                     else:
                         st.info("Nenhum item detalhado para este pedido.")"""
+        
         elif opcoes_cliente == "Atualizar dados do Cliente":
             st.subheader("Atualizar os dados do Cliente")
             todos_clientes = Clientes.listar()
@@ -206,35 +281,6 @@ def show():
                                     st.error(f"Ocorreu um erro inesperado: {e}")
                 else:
                     st.warning("Cliente selecionado não encontrado. Por favor, selecione um cliente válido.")
-        elif opcoes_cliente == "Excluir Cliente":
-            st.subheader("Excluir Cliente")
-            todos_clientes = Clientes.listar()
-            if not todos_clientes:
-                st.info("Nenhum cliente para excluir.")
-             else:
-                opcoes_clientes_selectbox = [f"{c.get_nome()} (ID: {c.get_id()})" for c in todos_clientes]
-                cliente_selecionado_str = st.selectbox(
-                    "Selecione o cliente para excluir:",
-                    opcoes_clientes_selectbox,
-                    key="select_cliente_delete"
-                )
-                cliente_id_str = cliente_selecionado_str.split('(ID: ')[1][:-1]
-                cliente_id = int(cliente_id_str)
-                cliente_para_excluir = Clientes.listar_id(cliente_id)
-
-                if cliente_para_excluir:
-                    st.warning(f"Tem certeza que deseja excluir o cliente: '{cliente_para_excluir.get_nome()}' (ID: {cliente_para_excluir.get_id()})?")
-                    if st.button("Confirmar Exclusão", key="confirm_delete_cliente"):
-                        try:
-                            Clientes.excluir(cliente_para_excluir) 
-                            st.success(f"Cliente '{cliente_para_excluir.get_nome()}' excluído com sucesso!")
-                            st.rerun() 
-                        except ValueError as e:
-                            st.error(f"Erro na exclusão: {e}")
-                        except Exception as e:
-                            st.error(f"Ocorreu um erro inesperado: {e}")
-                else:
-                    st.warning("Cliente selecionado não encontrado.")
 
     #=======================================================================================================================
     #=======================================================================================================================
