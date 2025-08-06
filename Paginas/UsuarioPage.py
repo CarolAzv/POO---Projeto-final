@@ -300,20 +300,21 @@ def show():
         
         st.subheader("Aba para Atualizar dados do Usuario")
         todos_usuarios = Usuarios.listar()
+        usuario_para_atualizar = None
         for usuario in todos_usuarios:
-            if usurario.get_id
-    
-        usuario_para_atualizar == Usuarios.listar_id(categoria_id) st.session_state.object_usuario
-        if categoria_para_atualizar:
+            if usuario.get_id == st.session_state.object_usuario[id]:
+                usuario_para_atualizar = usuario
+
+        if usuario_para_atualizar:
             with st.form("form_atualizar_usuario", clear_on_submit=False):
-                nome_atualizado = st.text_input("Nome da Categoria:", value=categoria_para_atualizar.get_nome(), key="nome_usuario_update")
-                email_atualizado = st.text_input("Descrição:", value=categoria_para_atualizar.get_descricao(), key="descricao_usuario_update")
-                cell_atualizado = st.text_input("Nome da Categoria:", value=categoria_para_atualizar.get_nome(), key="cll_usuario_update")
-                senha_atualizado = st.text_input("Nome da Categoria:", value=categoria_para_atualizar.get_nome(), key="senha_usuario_update")
+                nome_atualizado = st.text_input("Nome da Categoria:", value=usuario_para_atualizar.get_nome(), key="nome_usuario_update")
+                email_atualizado = st.text_input("Descrição:", value=usuario_para_atualizar.get_descricao(), key="descricao_usuario_update")
+                cell_atualizado = st.text_input("Nome da Categoria:", value=usuario_para_atualizar.get_cell(), key="cell_usuario_update")
+                senha_atualizado = st.text_input("Nome da Categoria:", value=usuario_para_atualizar.get_senha(), key="senha_usuario_update")
                 submit_atualizacao = st.form_submit_button("Atualizar Categoria")
 
                 if submit_atualizacao:
-                    if not nome_atualizado or not descricao_atualizada:
+                    if not nome_atualizado or not email_atualizado or not cell_atualizado or not senha_atualizado:
                         st.error("Por favor, preencha todos os campos para atualização.")
                     else:
                         try:
