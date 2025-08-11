@@ -58,7 +58,6 @@ def show():
                         st.error("Por favor, preencha todos os campos.")
                     else:
                         try:
-                            #                            v- check if this is right                                                                                           v- check if this is right 
                             novo_projeto = Projeto(id=0, idCriador=1, nome=novo_nome, descricao=novo_descricao, data_comeco=datetime.now(), data_fim = 0)
                             Projetos.inserir(novo_projeto)
                             
