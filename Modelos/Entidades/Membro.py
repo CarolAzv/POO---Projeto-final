@@ -1,5 +1,5 @@
 import streamlit as st
-class Usuario:
+class Membro:
     def __init__(self, id, idUsuario, idProjeto):
         self.set_id(id)
         self.set_idUsuario(idUsuario)
