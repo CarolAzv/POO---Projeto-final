@@ -59,7 +59,7 @@ def show():
                     else:
                         try:
                             #                            v- check if this is right                                                                                           v- check if this is right 
-                            novo_projeto = Projeto(id=0, idCriador=st.session_state.object_usuario(id), nome=novo_nome, descricao=novo_descricao, data_comeco=datetime.now(), data_fim = 0)
+                            novo_projeto = Projeto(id=0, idCriador=1, nome=novo_nome, descricao=novo_descricao, data_comeco=datetime.now(), data_fim = 0)
                             Projetos.inserir(novo_projeto)
                             
                             st.success(f"Projeto '{novo_nome}' criado com sucesso!")
@@ -84,7 +84,7 @@ def show():
         elif opcoes_projeto == "Ver Projeto":
             st.subheader("Projeto")
             projento_vendo = None
-            st.white("Indique o nome ou id do projeto: ")
+            st.write("Indique o nome ou id do projeto: ")
             with st.form("form_ver_projeto", clear_on_submit=True):
                 proj_nome = st.text_input("Nome do projeto:", key="projeto_nome")
                 proj_id = st.text_input("Id do projeto:", key="projeto_id")
@@ -136,9 +136,9 @@ def show():
             with st.form("form_adi_membro", clear_on_submit=True):
                 proj_id = st.text_input("Id do projeto:", key="projeto_id")
                 membro_id = st.text_input("Id do Usuario:", key="projeto_id")
-                submitted_ver_proj = st.form_submit_button("Visualizar")
+                submitted_p = st.form_submit_button("Adicionar Membro")
 
-                if submitted_ver_proj:
+                if submitted_p:
                      if not novo_nome and not novo_descricao:
                         st.error("Por favor, preencha pelo menos um dos campos.")
                 else:
@@ -156,7 +156,7 @@ def show():
             st.subheader("Excluir Membro")
             todos_projetos = Projetos.listar()
             todos_membros = Membros.listar()
-            nossos_projetos = Projetos.filtrar(todos_projetos, st.session_state.object_usuario[id])
+            nossos_projetos = Projetos.filtrar(todos_projetos, 1)
             nossos_membros = Projetos.filtrar(todos_membros, nossos_projetos)
             
             opcoes_membros_selectbox = [f"{c.get_nome()} (ID: {c.get_id()})" for c in todos_membros]
@@ -165,9 +165,9 @@ def show():
                 opcoes_membros_selectbox,
                 key="select_cliente_delete"
             )
-            cliente_id_str = cliente_selecionado_str.split('(ID: ')[1][:-1]
-            cliente_id = int(cliente_id_str)
-            cliente_para_excluir = Usuario.listar_id(cliente_id)
+            cliente_id_str = cliente_selecionado_str
+            cliente_id = cliente_id_str
+            cliente_para_excluir = Usuarios.listar_id(cliente_id)
 
             if cliente_para_excluir:
                 st.warning(f"Tem certeza que deseja excluir o cliente: '{cliente_para_excluir.get_nome()}' (ID: {cliente_para_excluir.get_id()})?")
@@ -193,67 +193,6 @@ def show():
             ("Listar suas tarefas","Atualizar suas tarefas"),
             key = "radio_entregadores"
         )
-        '''if opcoes_tarefas == "Listar entregadores":
-            st.subheader("Lista de Entregadores cadastrados")
-            todos_entregadores = Entregadores.listar()
-            if todos_entregadores:
-                dados_entregadores = [c.to_dict() for c in todos_entregadores]
-                
-                df_entregadores = pd.DataFrame(dados_entregadores) 
-                
-                st.dataframe(df_entregadores) 
-            else:
-                st.info("Nenhum entregador cadastrado ainda.")
-
-        elif opcoes_tarefas == "Atualizar dados do Entregador":
-            st.subheader("Atualizar Dados do Entregador")
-            todos_entregadores = Entregadores.listar()
-            if not todos_entregadores:
-                st.info("Nenhum entregador cadastrado para atualizar.")
-            else:
-                opcoes_entregadores_selectbox = [f"{e.get_nome()} (ID: {e.get_id()})" for e in todos_entregadores]
-                entregador_selecionado_str = st.selectbox(
-                    "Selecione o entregador para atualizar:",
-                    opcoes_entregadores_selectbox,
-                    key="select_entregador_update"
-                )
-                entregador_id_str = entregador_selecionado_str.split('(ID: ')[1][:-1]
-                entregador_id = int(entregador_id_str)
-                entregador_para_atualizar = Entregadores.listar_id(entregador_id)
-
-                if entregador_para_atualizar:
-                    with st.form("form_atualizar_entregador", clear_on_submit=False):
-                        st.write(f"Atualizando entregador ID: {entregador_para_atualizar.get_id()}")
-                        nome_atualizado = st.text_input("Nome Completo:", value=entregador_para_atualizar.get_nome(), key="nome_entregador_update")
-                        email_atualizado = st.text_input("Email:", value=entregador_para_atualizar.get_email(), key="email_entregador_update")
-                        senha_atualizada = st.text_input("Nova Senha (deixe em branco para manter a atual):", type="password", key="senha_entregador_update")
-                        fone_atualizado = st.text_input("Telefone:", value=entregador_para_atualizar.get_fone(), key="fone_entregador_update")
-                        transporte_atualizado = st.text_input("Transporte de Entregas:", value=entregador_para_atualizar.get_transporte(), key="transporte_entregador_update")
-
-                        submit_atualizacao = st.form_submit_button("Atualizar Entregador")
-
-                        if submit_atualizacao:
-                            if not nome_atualizado or not email_atualizado or not fone_atualizado or not transporte_atualizado:
-                                st.error("Por favor, preencha todos os campos.")
-                            else:
-                                try:
-                                    entregador_atualizado_obj = Entregador(
-                                        id=entregador_para_atualizar.get_id(),
-                                        nome=nome_atualizado,
-                                        email=email_atualizado,
-                                        senha=senha_atualizada if senha_atualizada else entregador_para_atualizar.get_senha(),
-                                        fone=fone_atualizado,
-                                        transporte=transporte_atualizado
-                                    )
-                                    Entregadores.atualizar(entregador_atualizado_obj)
-                                    st.success(f"Entregador '{nome_atualizado}' atualizado com sucesso!")
-                                    st.rerun()
-                                except ValueError as e:
-                                    st.error(f"Erro na atualização: {e}")
-                                except Exception as e:
-                                    st.error(f"Ocorreu um erro inesperado: {e}")
-                else:
-                    st.warning("Entregador selecionado não encontrado. Por favor, selecione um entregador válido.")'''
 
     #=======================================================================================================================
     #=======================================================================================================================
@@ -261,39 +200,29 @@ def show():
     with tab_atualizarUsuario:
         st.header("Atualizar dados do Usuario")
         
-        st.subheader("Aba para Atualizar dados do Usuario")
-        todos_usuarios = Usuarios.listar()
-        usuario_para_atualizar = None
-        for usuario in todos_usuarios:
-            if usuario.get_id == st.session_state.object_usuario[id]:
-                usuario_para_atualizar = usuario
+        with st.form("form_atualizar_usuario", clear_on_submit=False):
+            nome_atualizado = st.text_input("Nome do Usuário:", key="nome_usuario_update")
+            email_atualizado = st.text_input("Email:", key="email_usuario_update")
+            cell_atualizado = st.text_input("Celular:", key="cell_usuario_update")
+            senha_atualizada = st.text_input("Senha:", key="senha_usuario_update", type="password")
+            submit_atualizacao = st.form_submit_button("Atualizar Usuario")
 
-        if usuario_para_atualizar:
-            with st.form("form_atualizar_usuario", clear_on_submit=False):
-                nome_atualizado = st.text_input("Nome do Usuário:", value=usuario_para_atualizar.get_nome(), key="nome_usuario_update")
-                email_atualizado = st.text_input("Email:", value=usuario_para_atualizar.get_email(), key="email_usuario_update")
-                cell_atualizado = st.text_input("Celular:", value=usuario_para_atualizar.get_cell(), key="cell_usuario_update")
-                senha_atualizada = st.text_input("Senha:", value=usuario_para_atualizar.get_senha(), key="senha_usuario_update", type="password")
-                submit_atualizacao = st.form_submit_button("Atualizar Usuario")
-
-                if submit_atualizacao:
-                    if not nome_atualizado or not email_atualizado or not cell_atualizado or not senha_atualizada:
-                        st.error("Por favor, preencha todos os campos para atualização.")
-                    else:
-                        try:
-                            usuario_atualizado = Usuario(
-                                st.session_state.object_usuario[id],
-                                nome_atualizado,
-                                email_atualizado,
-                                cell_atualizado,
-                                senha_atualizada
-                            )
-                            Usuarios.atualizar(usuario_atualizado) 
-                            st.success(f"Usuario '{nome_atualizado}' atualizada com sucesso!")
-                            st.rerun()
-                        except ValueError as e:
-                            st.error(f"Erro na atualização: {e}")
-                        except Exception as e:
-                            st.error(f"Ocorreu um erro inesperado: {e}")
-        else:
-            st.warning("Categoria selecionada não encontrada.")
+            if submit_atualizacao:
+                if not nome_atualizado or not email_atualizado or not cell_atualizado or not senha_atualizada:
+                    st.error("Por favor, preencha todos os campos para atualização.")
+                else:
+                    try:
+                        usuario_atualizado = Usuario(
+                            1,
+                            nome_atualizado,
+                            email_atualizado,
+                            cell_atualizado,
+                            senha_atualizada
+                        )
+                        Usuarios.atualizar(usuario_atualizado) 
+                        st.success(f"Usuario '{nome_atualizado}' atualizada com sucesso!")
+                        st.rerun()
+                    except ValueError as e:
+                        st.error(f"Erro na atualização: {e}")
+                    except Exception as e:
+                        st.error(f"Ocorreu um erro inesperado: {e}")
