@@ -2,7 +2,7 @@ import json
 import os 
 from Modelos.Entidades.Papel import Papel
 import streamlit as st
-class Papeis:
+class  Papeis:
     objetos = [] 
     FILE_PATH = 'Data/papel.json'
 
@@ -76,3 +76,4 @@ class Papeis:
     def salvar(cls):
         with open(cls.FILE_PATH, "w", encoding='utf-8') as arquivo:
             json.dump([obj.to_dict() for obj in cls.objetos], arquivo, indent=4, ensure_ascii=False)
+
