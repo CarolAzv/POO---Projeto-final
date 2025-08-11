@@ -3,7 +3,7 @@ import os
 from Modelos.Entidades.Membro import Membro
 from Modelos.Entidades.Projeto import Projeto
 from Modelos.Persistencia.Projetos import Projeto
-from Papeis import Papeis
+from Modelos.Persistencia.Papeis import Papeis
 import streamlit as st
 class Membros:
     objetos = [] 
@@ -96,4 +96,5 @@ class Membros:
             if membros.get_idProjeto() == projetos.get_idCriador:
                 return obj
         return None
+
 
