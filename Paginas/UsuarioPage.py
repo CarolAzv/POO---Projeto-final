@@ -134,11 +134,11 @@ def show():
             st.subheader("Adicionar Membro a um Projeto")
             todos_projetos = Projetos.listar()
             with st.form("form_adi_membro", clear_on_submit=True):
-                proj_id = st.text_input("Id do projeto:", key="projeto_id")
+                proj_id = st.text_input("Id do projeto:", key="projeto_id_ver")
                 membro_id = st.text_input("Id do Usuario:", key="projeto_id")
-                submitted_p = st.form_submit_button("Adicionar Membro")
+                submitted_mem = st.form_submit_button("Visualizar")
 
-                if submitted_p:
+                if submitted_mem:
                      if not novo_nome and not novo_descricao:
                         st.error("Por favor, preencha pelo menos um dos campos.")
                 else:
