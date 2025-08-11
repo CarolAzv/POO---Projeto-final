@@ -59,10 +59,10 @@ def show():
                     else:
                         try:
                             #                            v- check if this is right                                                                                           v- check if this is right 
-                            novo_projeto = Projeto(id=0, idCriador=st.session_state.object_usuario(id), nome=nome_novo, descricao=novo_descricao, data_comeco=datetime.now(), data_fim = 0)
+                            novo_projeto = Projeto(id=0, idCriador=st.session_state.object_usuario(id), nome=novo_nome, descricao=novo_descricao, data_comeco=datetime.now(), data_fim = 0)
                             Projetos.inserir(novo_projeto)
                             
-                            st.success(f"Projeto '{nome_novo}' criado com sucesso!")
+                            st.success(f"Projeto '{novo_nome}' criado com sucesso!")
                             
                         except ValueError as e:
                             st.error(f"Erro na criação: {e}")
@@ -167,13 +167,13 @@ def show():
             )
             cliente_id_str = cliente_selecionado_str.split('(ID: ')[1][:-1]
             cliente_id = int(cliente_id_str)
-            cliente_para_excluir = Clientes.listar_id(cliente_id)
+            cliente_para_excluir = Usuario.listar_id(cliente_id)
 
             if cliente_para_excluir:
                 st.warning(f"Tem certeza que deseja excluir o cliente: '{cliente_para_excluir.get_nome()}' (ID: {cliente_para_excluir.get_id()})?")
                 if st.button("Confirmar Exclusão", key="confirm_delete_cliente"):
                     try:
-                        Clientes.excluir(cliente_para_excluir) 
+                        Usuario.excluir(cliente_para_excluir) 
                         st.success(f"Cliente '{cliente_para_excluir.get_nome()}' excluído com sucesso!")
                         st.rerun() 
                     except ValueError as e:
@@ -182,43 +182,6 @@ def show():
                         st.error(f"Ocorreu um erro inesperado: {e}")
             else:
                 st.warning("Cliente selecionado não encontrado.")
-                
-
-        """elif opcoes_cliente == "Listar Compras": 
-            st.subheader("Todas as Compras Realizadas")
-            todos_pedidos = Pedidos.listar()
-
-            if not todos_pedidos:
-                st.info("Nenhuma compra realizada ainda.")
-            else:
-                # Ordenar os pedidos do mais recente para o mais antigo
-                todos_pedidos.sort(key=lambda p: p.get_data_pedido(), reverse=True)
-
-                for i, pedido in enumerate(todos_pedidos):
-                    st.markdown(f"---") 
-                    st.markdown(f"### Pedido ID: {pedido.get_id()}")
-                    
-                    cliente = Clientes.listar_id(pedido.get_cliente_id())
-                    cliente_nome = cliente.get_nome() if cliente else "Cliente Desconhecido"
-                    st.write(f"**Cliente:** {cliente_nome} (ID: {pedido.get_cliente_id()})")
-                    
-                    st.write(f"**Data do Pedido:** {pedido.get_data_pedido().strftime('%d/%m/%Y %H:%M')}")
-                    st.write(f"**Status:** {pedido.get_status()}")
-                    st.write(f"**Valor Total:** R$ {pedido.get_valor_total():.2f}")
-                    st.write(f"**Endereço de Entrega:** {pedido.get_endereco()}")
-
-                    entregador = Entregadores.listar_id(pedido.get_entregador_id()) if pedido.get_entregador_id() else None
-                    entregador_nome = entregador.get_nome() if entregador else "Não Atribuído"
-                     st.write(f"**Entregador:** {entregador_nome}")
-
-                    if pedido.get_itens_pedidos():
-                        st.write("**Itens do Pedido:**")
-                        for item in pedido.get_itens_pedidos():
-                            produto_info = Produtos.listar_id(item.get('produto_id'))
-                            produto_nome = produto_info.get_nome() if produto_info else "Produto Desconhecido"
-                            st.markdown(f"- **{produto_nome}** (Qtd: {item.get('quantidade')}, R$ {item.get('preco_unitario'):.2f} cada)")
-                    else:
-                        st.info("Nenhum item detalhado para este pedido.")"""
         
     #=======================================================================================================================
     #=======================================================================================================================
@@ -230,7 +193,7 @@ def show():
             ("Listar suas tarefas","Atualizar suas tarefas"),
             key = "radio_entregadores"
         )
-        if opcoes_tarefas == "Listar entregadores":
+        '''if opcoes_tarefas == "Listar entregadores":
             st.subheader("Lista de Entregadores cadastrados")
             todos_entregadores = Entregadores.listar()
             if todos_entregadores:
@@ -290,7 +253,7 @@ def show():
                                 except Exception as e:
                                     st.error(f"Ocorreu um erro inesperado: {e}")
                 else:
-                    st.warning("Entregador selecionado não encontrado. Por favor, selecione um entregador válido.")
+                    st.warning("Entregador selecionado não encontrado. Por favor, selecione um entregador válido.")'''
 
     #=======================================================================================================================
     #=======================================================================================================================
